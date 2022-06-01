@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "optimizely-agent.fullname" . }}
+  labels:
+    {{- include "optimizely-agent.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    {{- range .Values.service.ports }}
+     - port: {{ .port }}
+       protocol: {{ .protocol }}
+       name: {{ .name }}
+       targetPort: {{ .targetPort }}
+    {{- end }}
+  selector:
+    {{- include "optimizely-agent.selectorLabels" . | nindent 4 }}
