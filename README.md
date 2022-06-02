@@ -8,7 +8,7 @@ Add the following repo to use the chart:
 
 ```console
 helm repo add optimizely-agent https://optimizely.github.io/optimizely-agent-helm
-helm install optimizely-agent
+helm install optimizely-agent optimizely-agent/optimizely-agent
 ```
 
 # Configurations
