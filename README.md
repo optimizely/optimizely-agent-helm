@@ -2,6 +2,15 @@
 
 The Optimizely Agent allows you to run a proxy to Optimizely in your own infrastructure, to help prevent adblockers from interfering with A/B tests. This repository contains a Helm chart to make it easy to host the Optimizely Agent in your own Kubernetes infrastructure.
 
+## Installation
+
+Add the following repo to use the chart:
+
+```console
+helm repo add optimizely-agent https://optimizely.github.io/optimizely-agent-helm
+helm install optimizely-agent
+```
+
 # Configurations
 
 |   Property	|  Description 	|
