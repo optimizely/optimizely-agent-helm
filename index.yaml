@@ -21,6 +21,6 @@ entries:
     - https://github.com/optimizely/agent
     type: application
     urls:
-    - https://optimizely.github.io/optimizely-agent-helm/agent-0.1.0.tgz
-    version: 0.1.0
+    - https://optimizely.github.io/optimizely-agent-helm/agent-1.0.0-alpha.tgz
+    version: 1.0.0-alpha
 generated: "2022-06-02T13:10:35.658719+05:00"
