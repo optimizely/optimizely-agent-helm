@@ -4,11 +4,19 @@ The Optimizely Agent allows you to run a proxy to Optimizely in your own infrast
 
 ## Installation
 
-Add the following repo to use the chart:
+To install the chart with the release name `my-agent`:
 
 ```console
 helm repo add optimizely-agent https://optimizely.github.io/optimizely-agent-helm
-helm install optimizely-agent optimizely-agent/optimizely-agent
+helm install my-agent optimizely-agent/agent
+```
+
+## Uninstalling the Chart
+
+To uninstall/delete the `my-agent` deployment:
+
+```console
+helm delete my-agent
 ```
 
 # Configurations
