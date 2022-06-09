@@ -11,6 +11,23 @@ helm repo add optimizely-agent https://optimizely.github.io/optimizely-agent-hel
 helm install my-agent optimizely-agent/agent
 ```
 
+## Modifying Values
+
+To override values in a chart, use either the '--values' flag and pass in a file or use the '--set' flag and pass configuration from the command line, to force a string value use '--set-string'. You can use '--set-file' to set individual values from a file when the value itself is too long for the command line or is dynamically generated.
+
+```console
+helm install -f myvalues.yaml my-agent optimizely-agent/agent
+```
+
+or 
+
+```console
+helm install --set nameOverride=abc123 my-agent optimizely-agent/agent
+```
+
+more about this:
+https://helm.sh/docs/helm/helm_install/
+
 ## Uninstalling the Chart
 
 To uninstall/delete the `my-agent` deployment:
