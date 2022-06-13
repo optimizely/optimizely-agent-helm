@@ -43,7 +43,7 @@ env:
     # OPTIMIZELY_API_AUTH_HMACSECRETS: hmac_secrets
 
 service:
-  type: NodePort
+  type: ClusterIP
   ports:
    - port: 8080
      protocol: TCP
@@ -159,7 +159,7 @@ config: |
       ## the location of the TLS certificate file
   #    certFile: <cert-file>
       ## IP of the host
-      host: "127.0.0.1"
+      host: "0.0.0.0"
       ## configure optional Agent interceptors
   #    interceptors:
   #        httplog: {}
