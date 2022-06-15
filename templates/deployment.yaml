@@ -54,10 +54,12 @@ spec:
           livenessProbe:
             httpGet:
               path: /health
+              # Need to change the structure and remove hardcoding.
               port: 8080
           readinessProbe:
             httpGet:
               path: /health
+              # Need to change the structure and remove hardcoding.
               port: 8080
           volumeMounts:
             - name: "{{ include "optimizely-agent.name" . }}-config"
