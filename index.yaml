@@ -3,6 +3,28 @@ entries:
   agent:
   - apiVersion: v2
     appVersion: 2.7.0
+    created: "2022-06-22T13:25:23.82455+05:00"
+    description: Helm chart for the Optimizely Agent https://docs.developers.optimizely.com/full-stack/docs/optimizely-agent
+    digest: 623473e69f9d01a6fbadeceb37571a16ada0be57ccf8cd4890cf74125cef30b0
+    home: https://docs.developers.optimizely.com/full-stack/docs/optimizely-agent
+    keywords:
+    - Optimizely
+    - Optimizely Agent
+    - Full Stack
+    - Rollouts
+    - Feature Flags
+    maintainers:
+    - email: devx@optimizely.com
+      name: Optimizely Dev X Team
+    name: agent
+    sources:
+    - https://github.com/optimizely/agent
+    type: application
+    urls:
+    - https://optimizely.github.io/optimizely-agent-helm/agent-1.0.3-alpha.tgz
+    version: 1.0.3-alpha
+  - apiVersion: v2
+    appVersion: 2.7.0
     created: "2022-06-02T13:10:35.664275+05:00"
     description: Helm chart for the Optimizely Agent https://docs.developers.optimizely.com/full-stack/docs/optimizely-agent
     digest: 7f15857bd02c2496cc22a2eed95e2027bb31b70224334ba083d6f7adf0286fd3
@@ -23,4 +45,4 @@ entries:
     urls:
     - https://optimizely.github.io/optimizely-agent-helm/agent-1.0.2-alpha.tgz
     version: 1.0.2-alpha
-generated: "2022-06-02T13:10:35.658719+05:00"
+generated: "2022-06-22T13:25:23.80124+05:00"
