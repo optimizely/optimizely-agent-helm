@@ -62,16 +62,20 @@ ingress:
   enabled: false
   # annotations: {}
   # hosts:
-  #   - host: optimizely-agent.local
+  #   - host: api.optimizely-agent.local
   #     paths:
   #     - port: 8080
-  #       path: /api
+  #       path: /
   #       pathType: Prefix
+  #   - host: webhook.optimizely-agent.local
+  #     paths:
   #     - port: 8085
-  #       path: /webhook
+  #       path: /
   #       pathType: Prefix
+  #   - host: admin.optimizely-agent.local
+  #     paths:
   #     - port: 8088
-  #       path: /admin
+  #       path: /
   #       pathType: Prefix
   # tls: []
 
