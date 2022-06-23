@@ -58,9 +58,12 @@ env:
     # OPTIMIZELY_ADMIN_AUTH_HMACSECRETS: hmac_secrets
     # OPTIMIZELY_API_AUTH_HMACSECRETS: hmac_secrets
 
-
+# Service configuration for exposing pods to network traffic (https://kubernetes.io/docs/concepts/services-networking/service/)
 service:
+  # `ClusterIP` is default allowing access using the K8s' cluster IP address on the network. Change the `type` based on your network's
+  # requirements (https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
   type: ClusterIP
+  # These are 3 ports on which the Agent's functinoality is exposed. Please do not adjust the `targetPort`s. You may adjust the external port as you need. 
   ports:
    - port: 8080
      protocol: TCP
@@ -74,6 +77,7 @@ service:
      protocol: TCP
      name: admin
      targetPort: 8088
+
 
 ingress:
   enabled: false
