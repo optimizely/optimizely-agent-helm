@@ -1,31 +1,44 @@
-# Default values for optimizely-agent.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
+# These are the default values for running Optimizely Agent in Kubernetes.
 
+# Copy this file renaming it. Then, install Agent into your K8s cluster using the `-f`iles flag eg
+# `helm install  -f <./path-to/your-custom-values.yaml> <agent-deployment-name> optimizely-agent/agent --version <version>`
+
+#################
+
+# Initial number of replica pods to run. We recommend a minimum of 2 replicas.
 replicaCount: 2
 
 image:
+  # Use `optimizely/agent` unless you have a specific usecase; Pulls from https://hub.docker.com/r/optimizely/agent 
   repository: optimizely/agent
+  # Use `IfNotPresent` to get the image if not available locally. Alternatives (https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
   pullPolicy: IfNotPresent
 
+# TODO: Do we need to confuse with implementors by adding this? (https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod)
+# Would a client be pulling an out-of-band image from a private container registry?
 imagePullSecrets: []
+
+# Use name overrides to adjust the name of this Chart [optional] and/or...
 nameOverride: ""
+# overriding the fully qualified name [optional] of the app once deployed
 fullnameOverride: ""
 
 serviceAccount:
-  # Specifies whether a service account should be created
+  # Specifies whether a service account (https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/) should be created
   create: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
+  # Annotations (https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) to add to the service account [optional]
+  annotations: {} # 👈 Remember: remove the empty object `{}` and place sub-properties indented on the next lines 
+  # The name of the service account to use. If not set and `create` is true, a name is generated using the fullname template [optional]
   name: ""
 
+# Annotations (https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) to add to each pod [optional]
 podAnnotations: {}
 
+
+# Pod-level security context (https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod)
 podSecurityContext: {}
   # fsGroup: 2000
-
+# Container-level security context (https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container)
 securityContext: {}
   # capabilities:
   #   drop:
@@ -34,13 +47,17 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
+# Environmental values used to fill... 
 env:
+  # ...the ConfigMap (https://kubernetes.io/docs/concepts/configuration/configmap/) to store non-confidential data in key-value pairs   
   variables: {}
     # OPTIMIZELY_SDKKEYS: sdk_keys
     # OPTIMIZELY_CLIENT_FLUSHINTERVAL: flush_interval
+  # ...the Secrets configuration. Be sure to follow the proper encoding for the `data` field (https://kubernetes.io/docs/concepts/configuration/secret/#editing-a-secret)
   secrets: {}
     # OPTIMIZELY_ADMIN_AUTH_HMACSECRETS: hmac_secrets
     # OPTIMIZELY_API_AUTH_HMACSECRETS: hmac_secrets
+
 
 service:
   type: ClusterIP
