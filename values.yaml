@@ -1,6 +1,6 @@
 # These are the default values for running Optimizely Agent in Kubernetes.
 
-# Copy this file renaming it. Then, install Agent into your K8s cluster using the `-f`iles flag eg
+# Copy this file and rename it. Then, install Agent into your K8s cluster using the `-f`iles flag eg
 # `helm install  -f <./path-to/your-custom-values.yaml> <agent-deployment-name> optimizely-agent/agent --version <version>`
 
 #################
@@ -63,7 +63,8 @@ service:
   # `ClusterIP` is default allowing access using the K8s' cluster IP address on the network. Change the `type` based on your network's
   # requirements (https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
   type: ClusterIP
-  # These are 3 ports on which the Agent's functinoality is exposed. Please do not adjust the `targetPort`s. You may adjust the external port as you need. 
+  # These are the 3 ports on which the Agent's functinoality is exposed. 
+  # Please do not adjust the `targetPort`s. You may adjust the external port as you need. 
   ports:
    - port: 8080
      protocol: TCP
@@ -78,9 +79,11 @@ service:
      name: admin
      targetPort: 8088
 
-
+# Allow for exposing inbound traffic to the cluster (https://kubernetes.io/docs/concepts/services-networking/ingress/)
 ingress:
+  # Set `enabled` to `true` then ...
   enabled: false
+  # .. uncomment the following lines and configure the ingress values below 
   # annotations: {}
   # hosts:
   #   - host: api.optimizely-agent.local
@@ -98,35 +101,45 @@ ingress:
   #     - port: 8088
   #       path: /
   #       pathType: Prefix
+  # TODO: Can we provide examples of what values should be added in this collection? I can't tell from looking at the `ingress.yaml`
+  # (https://kubernetes.io/docs/concepts/services-networking/ingress/#tls)
   # tls: []
 
-resources: {} # set your own resources
+# Set custom Container (https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#example-1) compute resources 
+resources: {} 
 
+# Configure how auto-scaling of pod counts should occur
 autoscaling:
+  # First, set `enabled` to `true` then...
   enabled: false
+  # ...configure the following values to meet your traffic requirements [consumed in the hpa.yaml for HorizontalPodAutoscaler when enabled]
   minReplicas: 1
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
 
+# Constrain pods to be scheduled on a particular node with a given spec (https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+# TODO: can we add some commented examples?
 nodeSelector: {}
 
-tolerations: []
-  # - key: "key1"
-  #   operator: "Equal"
-  #   value: "value1"
-  #   effect: "NoSchedule"
-
-
+# Set expanded types of constraints for scheduling on nodes (https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
 affinity: {}
 
+# Set pod toleration of given taints on the node (https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
+tolerations: []
+  # - key: "example-key"
+  #   operator: "Exists"
+  #   effect: "NoSchedule"
+
+# Configure logging level for Optimizely-specific `config` below
 logs:
+  # Set `level` to panic, fatal, error, warn, info, or debug
   level: debug
   pretty: true
   includeSdkKey: true
 
-# -- Config file contents
-# @default -- See https://github.com/optimizely/agent/blob/master/config.yaml
+# Config file contents (https://github.com/optimizely/agent/blob/master/config.yaml) to be consumed by Agent directly as a 
+# scalar value after Helm template interpretation 
 config: |
   ## config.yaml provides a default set of configuration options
 
