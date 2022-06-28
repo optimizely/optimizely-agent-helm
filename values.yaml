@@ -5,8 +5,10 @@
 
 #################
 
-# Initial number of replica pods to run. We recommend a minimum of 2 replicas.
-replicaCount: 2
+# Use name overrides to adjust the name of this Chart [optional] and/or...
+nameOverride: ""
+# overriding the fully qualified name [optional] of the app once deployed
+fullnameOverride: ""
 
 image:
   # Use `optimizely/agent` unless you have a specific usecase; Pulls from https://hub.docker.com/r/optimizely/agent 
@@ -14,14 +16,9 @@ image:
   # Use `IfNotPresent` to get the image if not available locally. Alternatives (https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
   pullPolicy: IfNotPresent
 
-# TODO: Do we need to confuse with implementors by adding this? (https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod)
-# Would a client be pulling an out-of-band image from a private container registry?
+# TODO: Would a client be pulling an out-of-band Agent image from a private container registry? 
+# (https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod)
 imagePullSecrets: []
-
-# Use name overrides to adjust the name of this Chart [optional] and/or...
-nameOverride: ""
-# overriding the fully qualified name [optional] of the app once deployed
-fullnameOverride: ""
 
 serviceAccount:
   # Specifies whether a service account (https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/) should be created
@@ -31,9 +28,11 @@ serviceAccount:
   # The name of the service account to use. If not set and `create` is true, a name is generated using the fullname template [optional]
   name: ""
 
+# Initial number of replica pods to run. We recommend a minimum of 2 replicas.
+replicaCount: 2
+
 # Annotations (https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) to add to each pod [optional]
 podAnnotations: {}
-
 
 # Pod-level security context (https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod)
 podSecurityContext: {}
@@ -60,7 +59,7 @@ env:
 
 # Service configuration for exposing pods to network traffic (https://kubernetes.io/docs/concepts/services-networking/service/)
 service:
-  # `ClusterIP` is default allowing access using the K8s' cluster IP address on the network. Change the `type` based on your network's
+  # `ClusterIP` is default allowing access only from within the cluster. Change the `type` based on your network's
   # requirements (https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
   type: ClusterIP
   # These are the 3 ports on which the Agent's functinoality is exposed. 
@@ -101,7 +100,7 @@ ingress:
   #     - port: 8088
   #       path: /
   #       pathType: Prefix
-  # TODO: Can we provide examples of what values should be added in this collection? I can't tell from looking at the `ingress.yaml`
+  # TODO: Can we provide examples of what values should be added in TLS collection? It's unclear from the `ingress.yaml`
   # (https://kubernetes.io/docs/concepts/services-networking/ingress/#tls)
   # tls: []
 
@@ -119,7 +118,7 @@ autoscaling:
   targetMemoryUtilizationPercentage: 80
 
 # Constrain pods to be scheduled on a particular node with a given spec (https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
-# TODO: can we add some commented examples?
+# TODO: add commented examples?
 nodeSelector: {}
 
 # Set expanded types of constraints for scheduling on nodes (https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
