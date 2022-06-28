@@ -1,3 +1,36 @@
+*** Configuration Summary ***
+
+Name Override: {{ .Values.nameOverride }}
+Full Name Override: {{ .Values.fullnameOverride }}
+
+Replica Count: {{ .Values.replicaCount }}
+
+Service Account: 
+{{- if .Values.serviceAccount.create }}
+  {{ .Values.serviceAccount.name }}
+{{- else }}
+  [no service account used]
+{{- end }}
+
+Pod Annotations Applied:
+  {{ default "[no annotations applied]" .Values.podAnnotations }}
+
+Pod Security Context:
+  {{ default "[no pod security context applied]" .Values.podSecurityContext }}
+
+Container Security Context:
+  {{ default "[no container security context applied]" .Values.securityContext }}
+
+Environment Variables:
+  {{ default "[no environment variables applied]" .Values.env.variables }}
+
+Secrets:
+{{- if .Values.env.secrets }}
+  *** Secrets were applied ***
+{{- else }}
+  [no secrets applied]
+{{- end }}
+
 {{- if .Values.ingress.enabled }}
 1. Map ingress Address to Application URL's in /etc/hosts. 
 2. Application URL's:
