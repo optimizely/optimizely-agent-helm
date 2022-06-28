@@ -3,14 +3,32 @@
 Name Override: {{ .Values.nameOverride }}
 Full Name Override: {{ .Values.fullnameOverride }}
 
-Replica Count: {{ .Values.replicaCount }}
+Image Used: {{ .Values.image.repository }}:{{ .Values.image.tag }}
 
 Service Account: 
 {{- if .Values.serviceAccount.create }}
-  {{ .Values.serviceAccount.name }}
+  {{ default "[account name will be generated]" .Values.serviceAccount.name }}
 {{- else }}
   [no service account used]
 {{- end }}
+
+Replica Count: {{ .Values.replicaCount }}
+
+Auto-Scaling:
+{{- if .Values.autoscaling.enabled }}
+  Replicas between {{ .Values.autoscaling.minReplicas }} to {{ .Values.autoscaling.maxReplicas }}
+  Target CPU at {{ .Values.autoscaling.targetCPUUtilizationPercentage }}%
+  Target Memory at {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}%
+{{- end }}
+
+Node Selector:
+  {{ default "[no node selectors applied]" .Values.nodeSelector }}
+
+Node Affinity:
+  {{ default "[no node affinity applied]" .Values.affinity }}
+
+Node Tolerations:
+  {{ default "[no node tolarations applied]" .Values.tolerations }}
 
 Pod Annotations Applied:
   {{ default "[no annotations applied]" .Values.podAnnotations }}
@@ -21,6 +39,49 @@ Pod Security Context:
 Container Security Context:
   {{ default "[no container security context applied]" .Values.securityContext }}
 
+Network Service: 
+  Type: {{ .Values.service.type }}
+  Ports: 
+    {{- range $port := .Values.service.ports }}
+    {{ $port.name }}: {{ $port.targetPort }} [internal] <== {{ $port.port }} [external]
+    {{- end }}
+
+Network Ingress:
+  {{- if .Values.ingress.enabled }}
+  Application URLs:
+    {{- range $host := .Values.ingress.hosts }}
+      {{- range .paths }}
+    http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}{{ .path }}
+      {{- end }}
+    {{- end }}
+  Ingress Annotations:  
+    {{ default "[no ingress annotations applied]" .Values.ingress.annotations }}
+  {{- else }}
+  Access the application by running these commands in a bash terminal
+    {{- if contains "NodePort" .Values.service.type }}
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "optimizely-agent.fullname" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    echo http://$NODE_IP:$NODE_PORT
+    {{- else if contains "LoadBalancer" .Values.service.type }}
+      NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+            You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "optimizely-agent.fullname" . }}'
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "optimizely-agent.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    echo http://$SERVICE_IP:{{ .Values.service.port }}
+   {{- else if contains "ClusterIP" .Values.service.type }}
+    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "optimizely-agent.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+    export CONTAINER_PORT=$(kubectl get pod --namespace {{ .Release.Namespace }} $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+    echo "Visit http://127.0.0.1:8080 to use your application"
+    kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:$CONTAINER_PORT
+    {{- end }}
+  {{- end }}
+
+Resources:
+  {{ default "[no resources declarations applied]" .Values.resources }}
+
+Logging:
+  Level set to {{ .Values.logs.level | upper }} with friendly formatting {{ if $.Values.logs.pretty }}ON{{ else }}OFF{{ end }}.
+  SDK Key WILL {{- if not .Values.logs.includeSdkKey }} NOT {{- end }} be included in logs.
+
 Environment Variables:
   {{ default "[no environment variables applied]" .Values.env.variables }}
 
@@ -29,31 +90,4 @@ Secrets:
   *** Secrets were applied ***
 {{- else }}
   [no secrets applied]
-{{- end }}
-
-{{- if .Values.ingress.enabled }}
-1. Map ingress Address to Application URL's in /etc/hosts. 
-2. Application URL's:
-{{- range $host := .Values.ingress.hosts }}
-  {{- range .paths }}
-  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}{{ .path }}
-  {{- end }}
-{{- end }}
-{{ else }}
-1. Get the application URL by running these commands:
-{{- if contains "NodePort" .Values.service.type }}
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "optimizely-agent.fullname" . }})
-  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-  echo http://$NODE_IP:$NODE_PORT
-{{- else if contains "LoadBalancer" .Values.service.type }}
-     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "optimizely-agent.fullname" . }}'
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "optimizely-agent.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-  echo http://$SERVICE_IP:{{ .Values.service.port }}
-{{- else if contains "ClusterIP" .Values.service.type }}
-  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "optimizely-agent.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
-  export CONTAINER_PORT=$(kubectl get pod --namespace {{ .Release.Namespace }} $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
-  echo "Visit http://127.0.0.1:8080 to use your application"
-  kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:$CONTAINER_PORT
-{{- end }}
 {{- end }}
