@@ -13,6 +13,8 @@ fullnameOverride: ""
 image:
   # Use `optimizely/agent` unless you have a specific usecase; Pulls from https://hub.docker.com/r/optimizely/agent 
   repository: optimizely/agent
+  # If you wish to use a specific image tag set that here (https://kubernetes.io/docs/concepts/containers/images/#image-names)
+  tag: ""
   # Use `IfNotPresent` to get the image if not available locally. Alternatives (https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
   pullPolicy: IfNotPresent
 
