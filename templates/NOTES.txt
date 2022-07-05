@@ -35,7 +35,9 @@ Node Affinity:
 Node Tolerations:
 {{- if .Values.tolerations }}
   {{- range $toleration := .Values.tolerations }}
-  {{ $toleration.key }} {{ $toleration.operator }} {{ $toleration.effect }}
+  Key: {{ $toleration.key }} 
+  Operator: {{ $toleration.operator }} 
+  Effect: {{ $toleration.effect }}
   {{- end }}
 {{- else }}
   [no node tolarations applied]
