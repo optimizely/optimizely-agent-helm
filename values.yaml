@@ -19,7 +19,7 @@ image:
   pullPolicy: IfNotPresent
 
 # Set image pull secrets if you use a private container registry (https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod)
-imagePullSecrets: []
+imagePullSecrets: [] # 👈 Remember: remove the empty object `[]` and place collection values indented on the next lines 
 
 serviceAccount:
   # Specifies whether a service account (https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/) should be created
@@ -51,7 +51,10 @@ affinity: {}
 
 # Set pod toleration of given taints on the node (https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) [optional]
 tolerations: []
-  # - key: "example-key"
+  # - key: "example-key-1"
+  #   operator: "Exists"
+  #   effect: "NoSchedule"
+  # - key: "example-key-2"
   #   operator: "Exists"
   #   effect: "NoSchedule"
 

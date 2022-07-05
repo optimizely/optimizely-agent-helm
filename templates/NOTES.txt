@@ -1,9 +1,12 @@
 *** Configuration Summary ***
 
-Name Override: {{ .Values.nameOverride }}
-Full Name Override: {{ .Values.fullnameOverride }}
+Name Override: 
+  {{ default "[no name override; using generated name]" .Values.nameOverride }}
+Full Name Override: 
+  {{ default "[no full name override; using generated full name]" .Values.fullnameOverride }}
 
-Image Used: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+Image Used: 
+  {{ .Values.image.repository }}:{{ default "latest" .Values.image.tag }}
 
 Service Account: 
 {{- if .Values.serviceAccount.create }}
@@ -30,7 +33,13 @@ Node Affinity:
   {{ default "[no node affinity applied]" .Values.affinity }}
 
 Node Tolerations:
-  {{ default "[no node tolarations applied]" .Values.tolerations }}
+{{- if .Values.tolerations }}
+  {{- range $toleration := .Values.tolerations }}
+  {{ $toleration.key }} {{ $toleration.operator }} {{ $toleration.effect }}
+  {{- end }}
+{{- else }}
+  [no node tolarations applied]
+{{- end }}
 
 Pod Annotations Applied:
   {{ default "[no annotations applied]" .Values.podAnnotations }}
