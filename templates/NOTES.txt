@@ -19,7 +19,6 @@ Auto-Scaling:
   Replicas between {{ .Values.autoscaling.minReplicas }} to {{ .Values.autoscaling.maxReplicas }}
   Target CPU at {{ .Values.autoscaling.targetCPUUtilizationPercentage }}%
   Target Memory at {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}%
-{{- end }}
 {{- else }}
   [auto-scaling is disabled]
 {{- end }}
