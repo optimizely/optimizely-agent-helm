@@ -20,6 +20,9 @@ Auto-Scaling:
   Target CPU at {{ .Values.autoscaling.targetCPUUtilizationPercentage }}%
   Target Memory at {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}%
 {{- end }}
+{{- else }}
+  [auto-scaling is disabled]
+{{- end }}
 
 Node Selector:
   {{ default "[no node selectors applied]" .Values.nodeSelector }}
