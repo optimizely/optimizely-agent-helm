@@ -1,31 +1,71 @@
-# Default values for optimizely-agent.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
+# These are the default values for running Optimizely Agent in Kubernetes.
 
-replicaCount: 2
+# Copy this file. Then, install Agent into your K8s cluster using the `-f`ile flag eg
+# `helm install  -f <./path-to/your-custom-values.yaml> <agent-deployment-name> optimizely-agent/agent --version <version>`
 
-image:
-  repository: optimizely/agent
-  pullPolicy: IfNotPresent
+#################
 
-imagePullSecrets: []
+# Use name overrides to adjust the name of this Chart [optional] and/or...
 nameOverride: ""
+# overriding the fully qualified name [optional] of the app once deployed
 fullnameOverride: ""
 
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
+image:
+  # Use `optimizely/agent` unless you have a specific usecase; Pulls from https://hub.docker.com/r/optimizely/agent 
+  repository: optimizely/agent
+  # If you wish to use a specific image tag set that here (https://kubernetes.io/docs/concepts/containers/images/#image-names)
+  tag: ""
+  # Use `IfNotPresent` to get the image if not available locally. Alternatives (https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+  pullPolicy: IfNotPresent
 
+# Set image pull secrets if you use a private container registry (https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod)
+imagePullSecrets: [] # 👈 Remember: remove the empty object `[]` and place collection values indented on the next lines 
+
+serviceAccount:
+  # Specifies whether a service account (https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/) should be created
+  create: true
+  # The name of the service account to use. If not set and `create` is true, a name is generated using the fullname template [optional]
+  name: ""
+  # Annotations (https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) to add to the service account [optional]
+  annotations: {} # 👈 Remember: remove the empty object `{}` and place sub-properties indented on the next lines 
+
+# Set the number of replica pods to run >= 1. 
+# For dynamic load balancing use the autoscaling section below.
+replicaCount: 1
+
+# Configure how auto-scaling of pod counts should occur
+autoscaling:
+  # First, set `enabled` to `true` then...
+  enabled: false
+  # ...configure the following values to meet your traffic requirements [consumed in the hpa.yaml for HorizontalPodAutoscaler when enabled]
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+# Constrain pods to be scheduled on a particular node with a given spec (https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector) [optional]
+nodeSelector: {}
+
+# Set expanded types of constraints for scheduling on nodes (https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)  [optional]
+affinity: {}
+
+# Set pod toleration of given taints on the node (https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) [optional]
+tolerations: []
+  # - key: "example-key-1"
+  #   operator: "Exists"
+  #   effect: "NoSchedule"
+  # - key: "example-key-2"
+  #   operator: "Exists"
+  #   effect: "NoSchedule"
+
+# Annotations (https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) to add to each pod [optional]
 podAnnotations: {}
 
+# Pod-level security context (https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) [optional]
 podSecurityContext: {}
   # fsGroup: 2000
 
+# Container-level security context (https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container) [optional]
 securityContext: {}
   # capabilities:
   #   drop:
@@ -34,16 +74,13 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
-env:
-  variables: {}
-    # OPTIMIZELY_SDKKEYS: sdk_keys
-    # OPTIMIZELY_CLIENT_FLUSHINTERVAL: flush_interval
-  secrets: {}
-    # OPTIMIZELY_ADMIN_AUTH_HMACSECRETS: hmac_secrets
-    # OPTIMIZELY_API_AUTH_HMACSECRETS: hmac_secrets
-
+# Service configuration for exposing pods to network traffic (https://kubernetes.io/docs/concepts/services-networking/service/)
 service:
+  # `ClusterIP` is default allowing access only from within the cluster. Change the `type` based on your network's
+  # requirements (https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
   type: ClusterIP
+  # These are the 3 ports on which the Agent's functinoality is exposed. 
+  # Please do not adjust the `targetPort`s. You may adjust the external port as you need. 
   ports:
    - port: 8080
      protocol: TCP
@@ -58,8 +95,11 @@ service:
      name: admin
      targetPort: 8088
 
+# Allow for exposing inbound traffic to the cluster (https://kubernetes.io/docs/concepts/services-networking/ingress/)
 ingress:
+  # Set `enabled` to `true` then ...
   enabled: false
+  # .. uncomment the following lines and configure the ingress values below 
   # annotations: {}
   # hosts:
   #   - host: api.optimizely-agent.local
@@ -77,35 +117,33 @@ ingress:
   #     - port: 8088
   #       path: /
   #       pathType: Prefix
+  # Set any TLS configurations in a collection below (https://kubernetes.io/docs/concepts/services-networking/ingress/#tls)
   # tls: []
 
-resources: {} # set your own resources
+# Set custom Container (https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#example-1) compute resources [optional]
+resources: {} 
 
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  targetMemoryUtilizationPercentage: 80
-
-nodeSelector: {}
-
-tolerations: []
-  # - key: "key1"
-  #   operator: "Equal"
-  #   value: "value1"
-  #   effect: "NoSchedule"
-
-
-affinity: {}
-
+# Configure logging level for Optimizely-specific `config` below
 logs:
+  # Set `level` to panic, fatal, error, warn, info, or debug
   level: debug
   pretty: true
   includeSdkKey: true
 
-# -- Config file contents
-# @default -- See https://github.com/optimizely/agent/blob/master/config.yaml
+# Environmental values for... 
+env:
+  # The ConfigMap (https://kubernetes.io/docs/concepts/configuration/configmap/) to store non-confidential data in key-value pairs
+  # Alternatively or in addition, you can use a `config` section below (https://github.com/optimizely/agent#configuration-options)
+  variables: {}
+    # OPTIMIZELY_SDKKEYS: sdk_keys
+    # OPTIMIZELY_CLIENT_FLUSHINTERVAL: flush_interval
+  # ...the Secrets configuration. Be sure to follow the proper encoding for the `data` field (https://kubernetes.io/docs/concepts/configuration/secret/#editing-a-secret)
+  secrets: {}
+    # OPTIMIZELY_ADMIN_AUTH_HMACSECRETS: hmac_secrets
+    # OPTIMIZELY_API_AUTH_HMACSECRETS: hmac_secrets
+
+# Config file contents (https://github.com/optimizely/agent/blob/master/config.yaml) to be consumed by Agent directly as a 
+# scalar value after Helm template interpretation 
 config: |
   ## config.yaml provides a default set of configuration options
 
