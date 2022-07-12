@@ -1,32 +1,38 @@
 # Optimizely Agent Helm Chart
 
-The Optimizely Agent allows you to run a proxy to Optimizely in your own infrastructure, to help prevent adblockers from interfering with A/B tests. This repository contains a Helm chart to make it easy to host the Optimizely Agent in your own Kubernetes infrastructure.
+This repository contains a Helm chart to make it easy to host Optimizely Agent in your own Kubernetes infrastructure. The Optimizely Agent allows you to run a proxy to Optimizely in your own infrastructure, to help prevent adblockers from interfering with A/B tests. 
 
 ## Installation
 
 To install the chart with the release name `my-agent`:
 
-```console
+```shell
 helm repo add optimizely-agent https://optimizely.github.io/optimizely-agent-helm
 helm install my-agent optimizely-agent/agent
 ```
 
-## Modifying Values
+## Modifying values
 
-To override values in a chart, use either the '--values' flag and pass in a file or use the '--set' flag and pass configuration from the command line, to force a string value use '--set-string'. You can use '--set-file' to set individual values from a file when the value itself is too long for the command line or is dynamically generated.
+- To override values in a chart:
+   - use the `--values` flag and pass in a file.
+   - use the `--set` flag and pass configuration from the command line.
+- Use the `--set-file` flag to set individual values from a file when the value itself is too long for the command line or is dynamically generated.
+- To force a string value use `--set-string`. 
 
-```console
-helm install -f myvalues.yaml my-agent optimizely-agent/agent
+For example:
+
+```shell
+helm install --values myvalues.yaml my-agent optimizely-agent/agent
 ```
 
 or 
 
-```console
+```shell
 helm install --set nameOverride=abc123 my-agent optimizely-agent/agent
 ```
 
-more about this:
-https://helm.sh/docs/helm/helm_install/
+For more information, view the [Helm install documentation](https://helm.sh/docs/helm/helm_install/).
+
 
 ## Uninstalling the Chart
 
@@ -60,6 +66,6 @@ helm delete my-agent
 ## Links
 
 * <https://github.com/optimizely/agent>
-* <https://docs.developers.optimizely.com/full-stack/docs/optimizely-agent>
-* <https://hub.docker.com/r/optimizely/agent>
-* [Config file reference](https://github.com/optimizely/agent/blob/master/config.yaml)
+* <https://docs.developers.optimizely.com/experimentation/v4.0.0-full-stack/docs/optimizely-agent>
+* [Optimizely Agent Helm Chart](https://artifacthub.io/packages/helm/optimizely-agent/agent)
+* [Configuration file reference](https://github.com/optimizely/agent/blob/master/config.yaml)
