@@ -43,25 +43,45 @@ helm delete my-agent
 ```
 
 # Configurations
+To see all configurable options with detailed comments, visit the [values.yaml](https://github.com/optimizely/optimizely-agent-helm/blob/main/values.yaml) file or run:
 
-|   Property	|  Description 	|
-|---	|---	|
-|replicaCount| Number of deployment replicas	|
-|image 	|Docker image to be used	|
-| autoscaling  	| To allow and configure autoscaling  	|
-| nameOverride  	|  Replaces the name of the chart in the Chart.yaml file 	|
-|fullnameOverride   	| Completely replaces the generated name  	|
-| serviceAccount  	| Specifies whether a service account should be created  	|
-| podAnnotations  	| A map with Kubernetes annotations  	|
-| podSecurityContext  	|  The security settings that you specify for a Pod apply to all Containers in the Pod 	|
-|   securityContext	|   The security settings that you specify for agent container	|
-|   env	| Environment variables and secrets  	|
-| service  	|  The type of network service to use and mapping of incoming ports to targetPorts |
-| ingress  	|  Exposes HTTP and HTTPS routes from outside the cluster to services within the cluster 	|
-|  nodeSelector 	|  To constrain Pods to nodes with specific labels 	|
-|  tolerations 	| Tolerations to apply to Pods  	|
-|  affinity 	| Sets the affinity Kubernetes attribute for Pods  	|
-|  config 	| Optimizely client instance configuration properties  	|
+```shell
+helm show values optimizely-agent/agent
+``` 
+
+| Property | Description | Defalut value |
+| ---	|--- | --- |
+| nameOverride | Replaces the name of the chart in the Chart.yaml file | "" |
+| fullnameOverride | Completely replaces the generated name | "" | 
+| image.repository | Docker image to be used | optimizely/agent |
+| image.tag | Docker image tag | "" | 
+| image.pullPolicy | Sets the policy for a container and tag when pulling the image | IfNotPresent |
+| imagePullSecrets | If you are using a private registry | [] |
+| serviceAccount.create | Specifies whether a service account should be created | true |
+| serviceAccount.name| Optional - the name of the service account to use | "" |
+| serviceAccount.annotations | Optional - annotations to add to the service account | {} |
+| replicaCount | Number of deployment replicas | 1 |
+| autoscaling.enabled | To allow and configure autoscaling | false |
+| autoscaling.minReplicas | Minimum number of replicas | 1 |
+| autoscaling.maxReplicas | Maximum number of replicas | 100 |
+| autoscaling.targetCPUUtilizationPercentage | Set target percent of CPU utilization | 80 |
+| autoscaling.targetMemoryUtilizationPercentage | Set target percent of memory utilization | 80 |
+| nodeSelector | To constrain Pods to nodes with specific labels | {} |
+| affinity | Sets the affinity Kubernetes attribute for Pods | {} |
+| tolerations | Tolerations to apply to Pods | [] |
+| podAnnotations | A map with Kubernetes annotations | {} |
+| podSecurityContext | The security settings that you specify for a Pod apply to all Containers in the Pod | {} | 
+| securityContext | The security settings that you specify for agent container | {} |
+| service.type | The type of network service to use and mapping of incoming ports to targetPorts | ClusterIP |
+| service.ports | Ports exposed for Optimizely's Agent functionality | port: 8080, port: 8085, port: 8088 |
+| ingress.enabled  |  Exposes HTTP and HTTPS routes from outside the cluster to services within the cluster | false | 
+| resources | Set a custom container | {} |
+| logs.level | Configure logging level for Optimizely specific  logs | debug |
+| logs.pretty | Enable pretty print for Optimizely specific logs | true |
+| log.includeSdkKey | Enable SDK key in logs for Optimizely specific logs | true |
+| env.variables | Environment values for variables | {} |
+| env.secrets | Environment values for secrets | {} |
+| config | Optimizely client instance configuration properties | See [values.yaml](https://github.com/optimizely/optimizely-agent-helm/blob/main/values.yaml) for defaults |
 
 ## Links
 
