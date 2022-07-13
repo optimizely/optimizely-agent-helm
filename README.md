@@ -22,16 +22,16 @@ helm install my-agent optimizely-agent/agent
 For example:
 
 ```shell
-helm install --values myvalues.yaml my-agent optimizely-agent/agent
+helm install --values myvalues.yaml my-agent optimizely-agent/agent --version [CURRENT_VERSION]
 ```
 
 or 
 
 ```shell
-helm install --set nameOverride=abc123 my-agent optimizely-agent/agent
+helm install --set nameOverride=abc123 my-agent optimizely-agent/agent --version [CURRENT_VERSION]
 ```
 
-For more information, view the [Helm install documentation](https://helm.sh/docs/helm/helm_install/).
+For more information, view the [Helm install documentation](https://helm.sh/docs/helm/helm_install/) or install through [Artifact Hub](https://artifacthub.io/packages/helm/optimizely-agent/agent).
 
 
 ## Uninstalling the Chart
