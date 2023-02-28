@@ -298,7 +298,8 @@ config: |
           #   host: "localhost:6379"
           #   password: ""
           #   database: 0
-          # rest: 
+          # rest:
+          #   async: false 
           #   host: "http://localhost"
           #   lookupPath: "/ups/lookup"
           #   lookupMethod: "POST"
