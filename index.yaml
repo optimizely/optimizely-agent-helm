@@ -4,10 +4,10 @@ entries:
   - apiVersion: v2
     appVersion: 3.1.0
     created: "2023-11-14T20:28:59.863924964+06:00"
-    description: Helm chart for the Optimizely Agent https://docs.developers.optimizely.com/full-stack/docs/optimizely-agent
+    description: Helm chart for the Optimizely Agent https://docs.developers.optimizely.com/full-stack-experimentation/docs/optimizely-agent
     digest: 8c95f9dad10753db0d94d56fa25d65c6514e2c07f4df133638f8c799c5260d6f
-    home: https://docs.developers.optimizely.com/full-stack/docs/optimizely-agent
-    icon: https://github.com/optimizely/optimizely-agent-helm/Optimzely-icon.png
+    home: https://docs.developers.optimizely.com/full-stack-experimentation/docs/optimizely-agent
+    icon: https://raw.githubusercontent.com/optimizely/optimizely-agent-helm/main/Optimizely-icon.png
     keywords:
     - Optimizely
     - Optimizely Agent
@@ -27,10 +27,10 @@ entries:
   - apiVersion: v2
     appVersion: 3.0.0
     created: "2023-02-28T13:37:17.473913-05:00"
-    description: Helm chart for the Optimizely Agent https://docs.developers.optimizely.com/full-stack/docs/optimizely-agent
+    description: Helm chart for the Optimizely Agent https://docs.developers.optimizely.com/full-stack-experimentation/docs/optimizely-agent
     digest: a02900ec2d446c4959d57ea598131c8d677ffc0941cca0a9f55496f92a11663e
-    home: https://docs.developers.optimizely.com/full-stack/docs/optimizely-agent
-    icon: https://github.com/optimizely/optimizely-agent-helm/Optimzely-icon.png
+    home: https://docs.developers.optimizely.com/full-stack-experimentation/docs/optimizely-agent
+    icon: https://raw.githubusercontent.com/optimizely/optimizely-agent-helm/main/Optimizely-icon.png
     keywords:
     - Optimizely
     - Optimizely Agent
@@ -50,9 +50,9 @@ entries:
   - apiVersion: v2
     appVersion: 2.7.0
     created: "2022-07-07T13:16:27.768733+05:00"
-    description: Helm chart for the Optimizely Agent https://docs.developers.optimizely.com/full-stack/docs/optimizely-agent
+    description: Helm chart for the Optimizely Agent https://docs.developers.optimizely.com/full-stack-experimentation/docs/optimizely-agent
     digest: ce611535aca5e0673b282f83a4fc38bfb43ca1f9df3d6f685793c975cd9d9ce6
-    home: https://docs.developers.optimizely.com/full-stack/docs/optimizely-agent
+    home: https://docs.developers.optimizely.com/full-stack-experimentation/docs/optimizely-agent
     keywords:
     - Optimizely
     - Optimizely Agent
@@ -72,9 +72,9 @@ entries:
   - apiVersion: v2
     appVersion: 2.7.0
     created: "2022-07-07T13:16:27.781552+05:00"
-    description: Helm chart for the Optimizely Agent https://docs.developers.optimizely.com/full-stack/docs/optimizely-agent
+    description: Helm chart for the Optimizely Agent https://docs.developers.optimizely.com/full-stack-experimentation/docs/optimizely-agent
     digest: 623473e69f9d01a6fbadeceb37571a16ada0be57ccf8cd4890cf74125cef30b0
-    home: https://docs.developers.optimizely.com/full-stack/docs/optimizely-agent
+    home: https://docs.developers.optimizely.com/full-stack-experimentation/docs/optimizely-agent
     keywords:
     - Optimizely
     - Optimizely Agent
@@ -94,9 +94,9 @@ entries:
   - apiVersion: v2
     appVersion: 2.7.0
     created: "2022-06-02T13:10:35.664275+05:00"
-    description: Helm chart for the Optimizely Agent https://docs.developers.optimizely.com/full-stack/docs/optimizely-agent
+    description: Helm chart for the Optimizely Agent https://docs.developers.optimizely.com/full-stack-experimentation/docs/optimizely-agent
     digest: 7f15857bd02c2496cc22a2eed95e2027bb31b70224334ba083d6f7adf0286fd3
-    home: https://docs.developers.optimizely.com/full-stack/docs/optimizely-agent
+    home: https://docs.developers.optimizely.com/full-stack-experimentation/docs/optimizely-agent
     keywords:
     - Optimizely
     - Optimizely Agent
