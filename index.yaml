@@ -6,7 +6,7 @@ entries:
     created: "2023-12-19T19:15:40.686472+06:00"
     description: Helm chart for the Optimizely Agent https://docs.developers.optimizely.com/full-stack-experimentation/docs/optimizely-agent
     digest: 964d48b55bf52809b78bce5a81cee28fd57b432f39880c3ef31cb1f67aa1c847
-    home: https://docs.developers.optimizely.com/full-stack-experimentation/docs/optimizely-agent
+    home: https://docs.developers.optimizely.com/feature-experimentation/docs/optimizely-agent
     icon: https://raw.githubusercontent.com/optimizely/optimizely-agent-helm/main/Optimizely-icon.png
     keywords:
     - Optimizely
